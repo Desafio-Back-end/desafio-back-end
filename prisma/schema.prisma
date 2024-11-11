@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id    Int     @default(autoincrement()) @id
+  email String @unique
+  nome String?
+  tipoUsuario Int
+}
+
+model Instituicao {
+  id    Int     @default(autoincrement()) @id
+  idUsuario Int
+}
+
+model Aluno {
+   id    Int     @default(autoincrement()) @id
+   idUsuario Int
+}
+
+model Professor {
+   id    Int     @default(autoincrement()) @id
+   idUsuario Int
+}
+
+model Disciplina {
+   id    Int     @default(autoincrement()) @id
+   nome String?
+   preRequisto Int
+}
+
+model Turma {
+   id    Int     @default(autoincrement()) @id
+   idProfessor Int
+   idDisciplina Int
+   horarioTurno String?
+   anoSemestre String?
+   numVagas Int
+}
+
+model Matricula {
+   id    Int     @default(autoincrement()) @id
+   idAluno Int
+   idTurma Int
+   status String?
+}
