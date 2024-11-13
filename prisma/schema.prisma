@@ -21,7 +21,7 @@ model Usuario {
 }
 
 model Instituicao {
-  id    Int     @default(autoincrement()) @id
+  idInstituicao    Int     @default(autoincrement()) @id
   idUsuario Int
 }
 
@@ -38,15 +38,16 @@ model Professor {
 model Disciplina {
    id    Int     @default(autoincrement()) @id
    nome String?
+   instituicaoId Int
    preRequisto Int
 }
 
 model Turma {
-   id    Int     @default(autoincrement()) @id
+   idTurma    Int     @default(autoincrement()) @id
    idProfessor Int
    idDisciplina Int
    horarioTurno String?
-   anoSemestre String?
+   anoSemestre Int
    numVagas Int
 }
 

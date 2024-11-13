@@ -1,34 +1,22 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AlunosService } from './alunos.service';
-import { CreateAlunoDto } from './dto/create-aluno.dto';
-import { UpdateAlunoDto } from './dto/update-aluno.dto';
 
 @Controller('alunos')
 export class AlunosController {
-  constructor(private readonly alunosService: AlunosService) {}
+  constructor(private readonly alunoService: AlunosService){}
 
-  @Post()
-  create(@Body() createAlunoDto: CreateAlunoDto) {
-    return this.alunosService.create(createAlunoDto);
+  @Post('idAluno/matricular')
+  matricular(
+    @Param('idAluno') idAluno: number,
+    @Body('turma') turma: string,
+  ){
+    return this.alunoService.matricular(idAluno, turma);
   }
 
-  @Get()
-  findAll() {
-    return this.alunosService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.alunosService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAlunoDto: UpdateAlunoDto) {
-    return this.alunosService.update(+id, updateAlunoDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.alunosService.remove(+id);
+  @Post('adicionar')
+  adicionarAluno(
+    @Body('idUsuario') idUsuario: number
+  ){
+    return this.alunoService.adicionarAluno(idUsuario);
   }
 }

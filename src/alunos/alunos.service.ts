@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAlunoDto } from './dto/create-aluno.dto';
-import { UpdateAlunoDto } from './dto/update-aluno.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class AlunosService {
-  create(createAlunoDto: CreateAlunoDto) {
-    return 'This action adds a new aluno';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async matricular(idAluno: number, turma: string){
+    const turmaInformacao = await this.prisma.turma.findUnique({
+      where:{
+        idTurma: turma,
+      },
+      select:{
+        anoSemestre: true,
+        horarioTurno: true
+      },
+    });
+
+    if(!turmaInformacao){
+      throw new BadRequestException("Turma escolhida não foi encontrada")
+    }
+
+    //verificação de matricula
+    const existeMatricula = await this.prisma.matricula.findFirst({
+      where:{
+        idAluno: idAluno,
+        idTurma:{
+          anoSemestre: turmaInformacao.anoSemestre,
+          horarioTurno: turmaInformacao.horarioTurno
+        },
+      },
+    });
+
+    if(existeMatricula){
+      throw new BadRequestException("Aluno já matriculado")
+    }
+
   }
 
-  findAll() {
-    return `This action returns all alunos`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} aluno`;
-  }
-
-  update(id: number, updateAlunoDto: UpdateAlunoDto) {
-    return `This action updates a #${id} aluno`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} aluno`;
+  async adicionarAluno(idUsuario: number) {
+    const aluno = await this.prisma.aluno.create({
+      data: {
+        idUsuario,
+      },
+    });
+    return aluno;
   }
 }
