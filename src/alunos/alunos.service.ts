@@ -3,35 +3,32 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class AlunosService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
-  async matricular(idAluno: number, turma: string){
+  async matricular(idAluno: number, turma: number) {
     const turmaInformacao = await this.prisma.turma.findUnique({
-      where:{
-        idTurma: turma,
+      where: {
+        id: turma,
       },
-      select:{
+      select: {
         anoSemestre: true,
         horarioTurno: true
       },
     });
 
-    if(!turmaInformacao){
+    if (!turmaInformacao) {
       throw new BadRequestException("Turma escolhida não foi encontrada")
     }
 
     //verificação de matricula
     const existeMatricula = await this.prisma.matricula.findFirst({
-      where:{
+      where: {
         idAluno: idAluno,
-        idTurma:{
-          anoSemestre: turmaInformacao.anoSemestre,
-          horarioTurno: turmaInformacao.horarioTurno
-        },
+        idTurma: turma
       },
     });
 
-    if(existeMatricula){
+    if (existeMatricula) {
       throw new BadRequestException("Aluno já matriculado")
     }
 

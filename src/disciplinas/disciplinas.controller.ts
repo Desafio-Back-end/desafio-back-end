@@ -2,10 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DisciplinasService } from './disciplinas.service';
 import { CreateDisciplinaDto } from './dto/create-disciplina.dto';
 import { UpdateDisciplinaDto } from './dto/update-disciplina.dto';
+import { TipoUsuarios } from 'src/auth/tipoUsuario.decorator';
+import { TipoUsuario } from 'src/enums/tipoUsuario.enum';
 
+@TipoUsuarios(TipoUsuario.Instituicao)
 @Controller('disciplinas')
 export class DisciplinasController {
-  constructor(private readonly disciplinasService: DisciplinasService) {}
+  constructor(private readonly disciplinasService: DisciplinasService) { }
 
   @Post()
   create(@Body() createDisciplinaDto: CreateDisciplinaDto) {

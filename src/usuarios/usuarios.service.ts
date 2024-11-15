@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { PrismaService } from 'src/prisma.service';
+import { Usuario, Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsuariosService {
-  create(createUsuarioDto: CreateUsuarioDto) {
-    return 'This action adds a new usuario';
-  }
+  constructor(private prisma: PrismaService) {
 
-  findAll() {
-    return `This action returns all usuarios`;
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  //MÉTODO PARA CADASTRAR/CRIAR USUÁRIO
+  async cadastrarUsuario(data: Prisma.UsuarioCreateInput): Promise<Usuario> {
+    return this.prisma.usuario.create({
+      data,
+    });
   }
-
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  //MÉTODO PARA OBTER USUÁRIO POR EMAIL
+  async obterUsuarioPorEmail(email: string): Promise<Usuario> {
+    return this.prisma.usuario.findUnique({
+      where: {
+        email: email
+      }
+    });
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  // MÉTODO PARA OBTER USUÁRIO POR ID
+  async obterUsuarioPorId(id: number): Promise<Usuario> {
+    return this.prisma.usuario.findUnique({
+      where: {
+        id: id
+      }
+    });
   }
+  //MÉTODO PARA LOGAR USUÁRIO
 }

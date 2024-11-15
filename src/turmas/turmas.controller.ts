@@ -2,10 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TurmasService } from './turmas.service';
 import { CreateTurmaDto } from './dto/create-turma.dto';
 import { UpdateTurmaDto } from './dto/update-turma.dto';
+import { TipoUsuarios } from 'src/auth/tipoUsuario.decorator';
+import { TipoUsuario } from 'src/enums/tipoUsuario.enum';
 
+@TipoUsuarios(TipoUsuario.Instituicao)
 @Controller('turmas')
 export class TurmasController {
-  constructor(private readonly turmasService: TurmasService) {}
+  constructor(private readonly turmasService: TurmasService) { }
 
   @Post()
   create(@Body() createTurmaDto: CreateTurmaDto) {

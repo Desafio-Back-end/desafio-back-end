@@ -9,8 +9,9 @@ import { ProfessoresModule } from './professores/professores.module';
 import { DisciplinasModule } from './disciplinas/disciplinas.module';
 import { MatriculasModule } from './matriculas/matriculas.module';
 import { TurmasModule } from './turmas/turmas.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
-  imports: [ConfigModule.forRoot(), UsuariosModule, InstituicoesModule, AlunosModule, ProfessoresModule, DisciplinasModule, MatriculasModule, TurmasModule],
+  imports: [ConfigModule.forRoot(), UsuariosModule, InstituicoesModule, AlunosModule, ProfessoresModule, DisciplinasModule, MatriculasModule, TurmasModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
