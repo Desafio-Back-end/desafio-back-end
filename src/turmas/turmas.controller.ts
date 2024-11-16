@@ -11,27 +11,27 @@ export class TurmasController {
   constructor(private readonly turmasService: TurmasService) { }
 
   @Post()
-  create(@Body() createTurmaDto: CreateTurmaDto) {
-    return this.turmasService.create(createTurmaDto);
+  criarTurma(@Body() data: CreateTurmaDto) {
+    return this.turmasService.criarTurma(data);
   }
 
   @Get()
-  findAll() {
-    return this.turmasService.findAll();
+  listarTodasAsTurmas() {
+    return this.turmasService.listarTodasAsTurmas();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.turmasService.findOne(+id);
+  buscarTurma(@Param('id') id: string) {
+    return this.turmasService.buscarTurma(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTurmaDto: UpdateTurmaDto) {
-    return this.turmasService.update(+id, updateTurmaDto);
+  atualizarTurma(@Param('id') id: string, @Body() updateTurmaDto: UpdateTurmaDto) {
+    return this.turmasService.atualizarTurma(+id, updateTurmaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.turmasService.remove(+id);
+  removerTurma(@Param('id') id: string) {
+    return this.turmasService.removerTurma(+id);
   }
 }

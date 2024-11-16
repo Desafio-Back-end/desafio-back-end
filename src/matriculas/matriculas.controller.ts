@@ -11,27 +11,27 @@ export class MatriculasController {
   constructor(private readonly matriculasService: MatriculasService) { }
 
   @Post()
-  create(@Body() createMatriculaDto: CreateMatriculaDto) {
-    return this.matriculasService.create(createMatriculaDto);
+  criaMatricula(@Body() data: CreateMatriculaDto) {
+    return this.matriculasService.criarMatricula(data);
   }
 
   @Get()
-  findAll() {
-    return this.matriculasService.findAll();
+  listarTodasAsMatriculas() {
+    return this.matriculasService.listarTodasAsMatriculas();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.matriculasService.findOne(+id);
+  buscarMatricula(@Param('id') id: string) {
+    return this.matriculasService.buscarMatricula(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMatriculaDto: UpdateMatriculaDto) {
-    return this.matriculasService.update(+id, updateMatriculaDto);
+  atualizarMatricula(@Param('id') id: string, @Body() updateMatriculaDto: UpdateMatriculaDto) {
+    return this.matriculasService.atualizarMatricula(+id, updateMatriculaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.matriculasService.remove(+id);
+  removerMatricula(@Param('id') id: string) {
+    return this.matriculasService.removerMatricula(+id);
   }
 }
