@@ -9,21 +9,32 @@ export class InstituicoesController {
   constructor(private readonly instituicoesService: InstituicoesService) { }
 
   // criar oferta de turmas
-  @Post(':idInstituicoes/oferta')
-  criarOfertaDeTurmas(
-    @Param('idInstituicoes') idInstituicoes: number,
-    @Body('oferta') oferta: string,
-  ) {
-    return this.instituicoesService.criarOfertaTurmas(idInstituicoes, oferta);
+  @Post('turmas/criar')
+  criarOfertaTurmas(
+    @Body('idProfessor') idProfessor: number,
+    @Body('idDisciplina') idDisciplina: number,
+    @Body('horarioTurno') horarioTurno: string,
+    @Body('anoSemestre') anoSemestre: string,
+    @Body('numVagas') numVagas: number,
+  ){
+    return this.instituicoesService.criarOfertaTurmas(
+      idProfessor,idDisciplina,horarioTurno,anoSemestre,numVagas
+    );
   }
 
   // editar a turma
   @Patch('turmas/:idTurma')
   editarTurma(
-    @Param('idTurma') idTurma:number,
-    @Body('nome') novoNome: string,
+    @Param('idTurma') idTurma: number,
+    @Body('horarioTurno') horarioTurno?:string,
+    @Body('anoSemestre') anoSemestre?: string,
+    @Body('numVagas') numVagas?:number,
   ){
-    return this.instituicoesService.editarTurma(idTurma, novoNome);
+    return this.instituicoesService.editarTurma(idTurma,{
+      horarioTurno,
+      anoSemestre,
+      numVagas,
+    });
   }
 
   // excluir uma turma
@@ -43,6 +54,24 @@ export class InstituicoesController {
     return this.instituicoesService.cadastrarDisciplina(idInstituicoes, disciplina);
   }
 
+  // editar uma disciplina
+  @Patch('disciplina/:idDisciplina')
+  editarDisciplina(
+    @Param('idDisciplina') idDisciplina: number,
+    @Body('nome') novoNome: string,
+  ){
+    return this.instituicoesService.editarDisciplina(idDisciplina, novoNome);
+  }
+
+  // excluir uma disciplina
+  @Delete('disciplina/:idDisciplina')
+  excluirDisciplina(
+    @Param('idDisciplina') idDisciplina: number
+  ){
+    return this.instituicoesService.excluirDisciplina(idDisciplina);
+  }
+
+  // adicionar uma instituição
   @Post('adicionar')
   adicionarInstituicao(@Body('idUsuario') idUsuario: number) {
     return this.instituicoesService.adicionarInstituicao(idUsuario);

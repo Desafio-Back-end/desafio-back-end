@@ -6,27 +6,32 @@ export class InstituicoesService {
   constructor(private prisma: PrismaService) { }
 
   // criar uma oferta de turma
-  async criarOfertaTurmas(idInstituicao: number, turmaNome: string) {
-   const turma = await this.prisma.turma.create({
-     data: {
-        nome: turmaNome,
-        instituicaoId: idInstituicao,
+  async criarOfertaTurmas(idProfessor:number, idDisciplina:number, horarioTurno:string, anoSemestre:string, numVagas:number) {
+    const turma = await this.prisma.turma.create({
+      data: {
+        idProfessor, // Relaciona o professor
+        idDisciplina, // Relaciona a disciplina
+        horarioTurno,
+        anoSemestre,
+        numVagas,
       },
     });
-     return turma;
+     return turma; 
   }
-
   // editar uma turma
-  async editarTurma(idTurma: number, novoNome: string){
-    const turma = await this.prisma.turma.update({
-      where:{
-        id: idTurma
-      },
-      data:{
-        nome: novoNome
-      },
+  async editarTurma(idTurma: number, updates: { horarioTurno?: string; anoSemestre?: string; numVagas?: number }) {
+  // verifica se a turma existe
+    const turma = await this.prisma.turma.findUnique({
+      where: { id: idTurma },
     });
-    return turma;
+
+    // atualizar os campos 
+    const turmaAtualizada = await this.prisma.turma.update({
+      where: { id: idTurma },
+      data: updates,
+    });
+
+    return turmaAtualizada;
   }
 
   // excluir uma turma
@@ -44,7 +49,7 @@ export class InstituicoesService {
      const disciplina = await this.prisma.disciplina.create({
        data:{
         nome: disciplinaNome,
-        instituicaoId: idInstituicao,
+        preRequisto: idInstituicao
        },
      });
      return disciplina;

@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma.service';
 export class AlunosService {
   constructor(private readonly prisma: PrismaService) { }
 
+  // criar uma matricula
   async matricular(idAluno: number, turma: number) {
     const turmaInformacao = await this.prisma.turma.findUnique({
       where: {
@@ -34,6 +35,7 @@ export class AlunosService {
 
   }
 
+  // adicionar um aluno
   async adicionarAluno(idUsuario: number) {
     const aluno = await this.prisma.aluno.create({
       data: {
