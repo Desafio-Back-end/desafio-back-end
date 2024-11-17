@@ -49,7 +49,7 @@ export class InstituicoesService {
      const disciplina = await this.prisma.disciplina.create({
        data:{
         nome: disciplinaNome,
-        preRequisto: idInstituicao
+        preRequisito: idInstituicao
        },
      });
      return disciplina;

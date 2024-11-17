@@ -38,8 +38,8 @@ model Professor {
 
 model Disciplina {
    id    Int     @default(autoincrement()) @id
-   nome String?
-   preRequisto Int
+   nome String
+   preRequisito Int
 }
 
 model Turma {

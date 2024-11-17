@@ -28,7 +28,7 @@ CREATE TABLE "Professor" (
 CREATE TABLE "Disciplina" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "nome" TEXT,
-    "preRequisto" INTEGER NOT NULL
+    "preRequisito" INTEGER NOT NULL
 );
 
 -- CreateTable
