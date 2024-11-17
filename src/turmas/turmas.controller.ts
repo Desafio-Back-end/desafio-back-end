@@ -10,12 +10,12 @@ import { TipoUsuario } from 'src/enums/tipoUsuario.enum';
 export class TurmasController {
   constructor(private readonly turmasService: TurmasService) { }
 
-  @Post()
+  @Post('cadastrar')
   criarTurma(@Body() data: CreateTurmaDto) {
     return this.turmasService.criarTurma(data);
   }
 
-  @Get()
+  @Get('listar')
   listarTodasAsTurmas() {
     return this.turmasService.listarTodasAsTurmas();
   }

@@ -1,56 +1,70 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTurmaDto } from './dto/create-turma.dto';
-import { UpdateTurmaDto } from './dto/update-turma.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Turma } from '@prisma/client';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class TurmasService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
+
+  async validarProfessorExiste(idProfessor: number) {
+    const professor = await this.prisma.professor.findUnique({
+      where: { id: idProfessor },
+    });
+    if (!professor) {
+      throw new BadRequestException('Professor não encontrado no banco de dados.');
+    }
+  }
+
+  async validarDisciplinaExiste(idDisciplina: number) {
+    const disciplina = await this.prisma.disciplina.findUnique({
+      where: { id: idDisciplina },
+    });
+    if (!disciplina) {
+      throw new BadRequestException('Disciplina não encontrada no banco de dados.');
+    }
+  }
+
+  validarHorarioTurno(horarioTurno: string) {
+    if (horarioTurno && !/^[1-7][1-3]$/.test(horarioTurno)) {
+      throw new BadRequestException(
+        'O horarioTurno deve estar no formato diaSemana/turno (ex: 43 para quarta-feira (4) de noite (3)).',
+      );
+    }
+  }
+
+  validarAnoSemestre(anoSemestre: string) {
+    if (anoSemestre && !/^\d{4}\/[1-2]$/.test(anoSemestre)) {
+      throw new BadRequestException(
+        'O anoSemestre deve estar no formato YYYY/S (ex: 2024/2, ano 2024, segundo semestre).',
+      );
+    }
+  }
+
+  validarNumVagas(numVagas: number) {
+    if (!Number.isInteger(numVagas) || numVagas < 0) {
+      throw new BadRequestException(
+        'O número de vagas deve ser um inteiro maior ou igual a 0.',
+      );
+    }
+  }
 
   async criarTurma(data: CreateTurmaDto) {
-    if (!Number.isInteger(data.idProfessor) || data.idProfessor <= 0) {
-      throw new Error('idProfessor deve ser um número inteiro positivo.');
-    }
-    const professorExistente = await this.prisma.professor.findUnique({
-      where: { id: data.idProfessor },
+    await this.validarProfessorExiste(data.idProfessor)
+    await this.validarDisciplinaExiste(data.idDisciplina)
+    this.validarHorarioTurno(data.horarioTurno)
+    this.validarAnoSemestre(data.anoSemestre)
+    this.validarNumVagas(data.numVagas)
+
+    const turmaCriada = await this.prisma.turma.create({
+      data,
     });
-
-    if (!professorExistente) {
-      throw new Error('Professor não encontrado no banco de dados.')
-    }
-
-    if (!Number.isInteger(data.idDisciplina) || data.idDisciplina <= 0) {
-      throw new Error('idDisciplina deve ser um número inteiro positivo.');
-    }
-    const disciplinaExistente = await this.prisma.disciplina.findUnique({
-      where: { id: data.idDisciplina },
-    });
-
-    if (!disciplinaExistente) {
-      throw new Error('Disciplina não encontrada no banco de dados.')
-    }
-
-    if (data.horarioTurno && !/^[1-7][1-3]$/.test(data.horarioTurno)) {
-      throw new Error(
-        'O horarioTurno deve estar no formato diaSemana/turno (ex: 33 para terça-feira (3) de noite (3))',
-      );
-    }
-
-    if (data.anoSemestre && !/^\d{4}\/[1-2]$/.test(data.anoSemestre)) {
-      throw new Error(
-        'O anoSemestre deve estar no formato YYYY/S (ex: 2024/2, ano 2024, segundo semestre)',
-      );
-    }
-
-    if (!Number.isInteger(data.numVagas) || data.numVagas < 0) {
-      throw new Error('O número de vagas deve ser um inteiro maior ou igual a 0.');
-    }
 
     return {
-      message: "Turma criada com sucesso!",
-      turma: data
-    }
+      message: 'Turma criada com sucesso!',
+      data: turmaCriada,
+    };
   }
 
   async listarTodasAsTurmas(): Promise<Turma[]> {
@@ -75,24 +89,39 @@ export class TurmasService {
     }
   }
 
-  async atualizarTurma(id: number, updateTurmaDto: UpdateTurmaDto) {
+  async atualizarTurma(id: number, data: Partial<CreateTurmaDto>) {
     try {
+      const turma = await this.buscarTurma(id)
+      if (!turma) {
+        throw new BadRequestException('Turma não encontrada no banco de dados.');
+      }
+
+      //await this.validarProfessorExiste(data.idProfessor)
+      await this.validarDisciplinaExiste(data.idDisciplina)
+      this.validarHorarioTurno(data.horarioTurno)
+      this.validarAnoSemestre(data.anoSemestre)
+      this.validarNumVagas(data.numVagas)
+        
       const updatedTurma = await this.prisma.turma.update({
         where: { id },
-        data: updateTurmaDto,
+        data: data,
       });
       return updatedTurma;
     } catch (error) {
       throw new Error(`Erro ao atualizar a turma: ${error.message}`);
     }
-    
   }
 
   async removerTurma(id: number) {
     try {
-      return await this.prisma.turma.delete({
+      const turmaDeletada = await this.prisma.turma.delete({
         where: { id },
       });
+
+      return {
+        message: 'Turma deletada com sucesso!',
+        data: turmaDeletada,
+      };
     } catch (error) {
       throw new Error(`Erro ao remover a turma: ${error.message}`);
     }

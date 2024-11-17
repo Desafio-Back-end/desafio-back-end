@@ -10,12 +10,12 @@ import { TipoUsuario } from 'src/enums/tipoUsuario.enum';
 export class MatriculasController {
   constructor(private readonly matriculasService: MatriculasService) { }
 
-  @Post()
+  @Post('cadastro')
   criaMatricula(@Body() data: CreateMatriculaDto) {
     return this.matriculasService.criarMatricula(data);
   }
 
-  @Get()
+  @Get('listar')
   listarTodasAsMatriculas() {
     return this.matriculasService.listarTodasAsMatriculas();
   }
