@@ -8,6 +8,8 @@ export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) { }
 
   @Post()
+  /* AQUI USEI O DECORATOR PUBLIC, PARA IDENTIFICAR QUE 
+  ESSA ROTA NÃO PRECISA DE AUTENTICAÇÃO*/
   @Public()
   cadastrarUsuario(@Body() usuario: Prisma.UsuarioCreateInput) {
     return this.usuariosService.cadastrarUsuario(usuario);

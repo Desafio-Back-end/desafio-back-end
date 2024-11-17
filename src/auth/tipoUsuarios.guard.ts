@@ -7,7 +7,7 @@ import { TIPO_USUARIO_KEY } from './tipoUsuario.decorator';
 @Injectable()
 export class TipoUsuariosGuard implements CanActivate {
     constructor(private reflector: Reflector) { }
-
+    // ESSE É O GUARD DE AUTORIZAÇÃO
     canActivate(context: ExecutionContext): boolean {
         const requiredTipoUsuarios = this.reflector.getAllAndOverride<TipoUsuario[]>(TIPO_USUARIO_KEY, [
             context.getHandler(),

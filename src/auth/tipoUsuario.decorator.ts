@@ -1,4 +1,4 @@
-
+//ESSE É O DECORATOR DE AUTORIZAÇÃO
 import { SetMetadata } from '@nestjs/common';
 import { TipoUsuario } from '../enums/tipoUsuario.enum';
 

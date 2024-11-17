@@ -14,7 +14,7 @@ import { IS_PUBLIC_KEY } from './public.decorator';
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(private jwtService: JwtService, private reflector: Reflector) { }
-
+    // ESSE É O GUARD DE AUTENTICAÇÃO
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
             context.getHandler(),
@@ -37,8 +37,6 @@ export class AuthGuard implements CanActivate {
                     secret: jwtConstants.secret
                 }
             );
-            // 💡 We're assigning the payload to the request object here
-            // so that we can access it in our route handlers
             request['user'] = payload;
         } catch {
             throw new UnauthorizedException();

@@ -10,6 +10,7 @@ import { AuthGuard } from './auth.guard';
 import { TipoUsuariosGuard } from './tipoUsuarios.guard';
 
 @Module({
+  // AQUI EU CONFIGUREI O MODULO JWT, QUE USO PARA GERAR OS TOKENS
   imports: [JwtModule.register({
     global: true,
     secret: jwtConstants.secret,
@@ -17,6 +18,7 @@ import { TipoUsuariosGuard } from './tipoUsuarios.guard';
   }),
   ],
   controllers: [AuthController],
+  // AQUI EU REGISTRO MINHAS GUARDS DE AUTORIZAÇÃO E AUTENTICAÇÃO
   providers: [AuthService, UsuariosService, PrismaService,
     {
       provide: APP_GUARD,

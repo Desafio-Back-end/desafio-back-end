@@ -6,13 +6,9 @@ import {
     HttpStatus,
     Post,
     Request,
-    UseGuards
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
 import { Public } from './public.decorator';
-import { TipoUsuarios } from './tipoUsuario.decorator';
-import { TipoUsuario } from 'src/enums/tipoUsuario.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -21,11 +17,11 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('login')
     @Public()
+    // MÉTODO DE LOGIN
     logar(@Body() logar: Record<string, any>) {
         return this.authService.logar(logar.email, logar.senhaInformada);
     }
-
-    @UseGuards(AuthGuard)
+    // MÉTODO PARA OBTER O PERFIL DO USUÁRIO, A PARTIR DO TOKEN
     @Get('profile')
     getProfile(@Request() req) {
         return req.user;
