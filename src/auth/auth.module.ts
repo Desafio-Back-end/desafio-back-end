@@ -14,7 +14,7 @@ import { TipoUsuariosGuard } from './tipoUsuarios.guard';
   imports: [JwtModule.register({
     global: true,
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '120s' },
+    // signOptions: { expiresIn: '120s' },
   }),
   ],
   controllers: [AuthController],
