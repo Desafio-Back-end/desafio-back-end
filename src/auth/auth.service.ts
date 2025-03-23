@@ -13,7 +13,7 @@ export class AuthService {
         if (user?.senha !== senhaInformada) {
             throw new UnauthorizedException();
         }
-        const payload = { sub: user.id, email: user.email, tipoUsuario: user.tipoUsuario };
+        const payload = { sub: user.id, nome: user.nome, email: user.email, tipoUsuario: user.tipoUsuario };
         return {
             access_token: await this.jwtService.signAsync(payload),
         };
