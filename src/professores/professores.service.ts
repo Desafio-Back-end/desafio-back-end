@@ -5,30 +5,34 @@ import { UpdateProfessorDto } from './dto/update-professor.dto';
 
 @Injectable()
 export class ProfessoresService {
-  constructor(private readonly prisma: PrismaService) {   
+  constructor(private readonly prisma: PrismaService) {
   }
 
   create(createProfessorDto: CreateProfessorDto) {
     return this.prisma.professor.create({
-      data: { idUsuario: createProfessorDto.idUsuario},
-    });  
+      data: { idUsuario: createProfessorDto.idUsuario },
+    });
   }
 
   findAll() {
-    return this.prisma.professor.findMany();
-  }  
-    
+    return this.prisma.professor.findMany({
+      include: {
+        usuario: true
+      }
+    });
+  }
+
   findOne(id: number) {
     return this.prisma.professor.findUnique({
       where: { id },
-    }); 
+    });
   }
 
   update(id: number, updateProfessorDto: UpdateProfessorDto) {
     return this.prisma.professor.update({
       where: { id },
-      data: { idUsuario: updateProfessorDto.idUsuario},
-    });   
+      data: { idUsuario: updateProfessorDto.idUsuario },
+    });
   }
 
   remove(id: number) {

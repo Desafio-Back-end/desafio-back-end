@@ -19,6 +19,7 @@ model Usuario {
   nome String?
   senha String?
   tipoUsuario Int
+  professor Professor?
 }
 
 model Instituicao {
@@ -33,7 +34,8 @@ model Aluno {
 
 model Professor {
    id    Int     @default(autoincrement()) @id
-   idUsuario Int
+   idUsuario Int @unique
+   usuario Usuario @relation(fields: [idUsuario], references: [id])
 }
 
 model Disciplina {

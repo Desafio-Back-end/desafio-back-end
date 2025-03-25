@@ -17,7 +17,7 @@ export class ProfessoresController {
     return this.professoresService.create(createProfessorDto);
   }
 
-  @TipoUsuarios(TipoUsuario.Professor)
+
   @Get()
   findAll() {
     return this.professoresService.findAll();
