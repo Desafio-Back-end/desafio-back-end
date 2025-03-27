@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param } from '@nestjs/common';
 import { AlunosService } from './alunos.service';
 import { TipoUsuarios } from 'src/auth/tipoUsuario.decorator';
 import { TipoUsuario } from 'src/enums/tipoUsuario.enum';
@@ -23,4 +23,10 @@ export class AlunosController {
   ) {
     return this.alunoService.adicionarAluno(idUsuario);
   }
+  @TipoUsuarios(TipoUsuario.Aluno)
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.alunoService.findOne(+id);
+  }
+
 }

@@ -6,7 +6,7 @@ import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class TurmasService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async validarProfessorExiste(idProfessor: number) {
     const professor = await this.prisma.professor.findUnique({
@@ -69,7 +69,18 @@ export class TurmasService {
 
   async listarTodasAsTurmas(): Promise<Turma[]> {
     try {
-      return await this.prisma.turma.findMany();
+      return await this.prisma.turma.findMany(
+        {
+          include: {
+            disciplina: true,
+            professor: {
+              include: {
+                usuario: true
+              }
+            }
+          }
+        }
+      );
     } catch (error) {
       throw new Error(`Erro ao buscar todas as turmas: ${error.message}`);
     }
@@ -101,7 +112,7 @@ export class TurmasService {
       this.validarHorarioTurno(data.horarioTurno)
       this.validarAnoSemestre(data.anoSemestre)
       this.validarNumVagas(data.numVagas)
-        
+
       const updatedTurma = await this.prisma.turma.update({
         where: { id },
         data: data,

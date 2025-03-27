@@ -36,18 +36,22 @@ model Professor {
    id    Int     @default(autoincrement()) @id
    idUsuario Int @unique
    usuario Usuario @relation(fields: [idUsuario], references: [id])
+   turmas Turma[]
 }
 
 model Disciplina {
    id    Int     @default(autoincrement()) @id
    nome String
    preRequisito Int
+   turmas Turma[]
 }
 
 model Turma {
    id    Int     @default(autoincrement()) @id
    idProfessor Int
    idDisciplina Int
+   disciplina Disciplina @relation(fields: [idDisciplina], references: [id])
+   professor Professor @relation(fields: [idProfessor], references: [id])
    horarioTurno String?
    anoSemestre String?
    numVagas Int

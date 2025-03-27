@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { MatriculasService } from './matriculas.service';
 import { CreateMatriculaDto } from './dto/create-matricula.dto';
 import { UpdateMatriculaDto } from './dto/update-matricula.dto';
@@ -11,13 +11,18 @@ export class MatriculasController {
   constructor(private readonly matriculasService: MatriculasService) { }
 
   @Post('cadastro')
-  criaMatricula(@Body() data: CreateMatriculaDto) {
-    return this.matriculasService.criarMatricula(data);
+  criaMatricula(@Body() data: CreateMatriculaDto, @Request() req) {
+    return this.matriculasService.criarMatricula(data, req.user.sub);
   }
 
   @Get('listar')
   listarTodasAsMatriculas() {
     return this.matriculasService.listarTodasAsMatriculas();
+  }
+
+  @Get('listarMatriculasAluno')
+  listarTodasAsMatriculasPorAluno(@Request() req) {
+    return this.matriculasService.listarTodasAsMatriculasAluno(req.user.sub);
   }
 
   @Get(':id')

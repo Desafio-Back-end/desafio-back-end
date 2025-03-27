@@ -44,4 +44,10 @@ export class AlunosService {
     });
     return aluno;
   }
+
+  findOne(id: number) {
+    return this.prisma.aluno.findUnique({
+      where: { id },
+    });
+  }
 }

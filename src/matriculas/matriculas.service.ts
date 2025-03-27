@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateMatriculaDto } from './dto/create-matricula.dto';
-import { UpdateMatriculaDto } from './dto/update-matricula.dto';
 import { PrismaService } from 'src/prisma.service';
 import { TurmasService } from '../turmas/turmas.service';
 
@@ -9,7 +8,7 @@ export class MatriculasService {
   constructor(
     private prisma: PrismaService,
     private turmasService: TurmasService,
-  ) {}
+  ) { }
 
   async validarAlunoExiste(idAluno: number) {
     const aluno = await this.prisma.aluno.findUnique({
@@ -36,15 +35,18 @@ export class MatriculasService {
     }
   }
 
-  async criarMatricula(data: CreateMatriculaDto) {
-    await this.validarAlunoExiste(data.idAluno);
+  async criarMatricula(data: CreateMatriculaDto, idUsuario?: number) {
+    const aluno = await this.prisma.aluno.findFirst({
+      where: { idUsuario: idUsuario },
+    });
+    await this.validarAlunoExiste(aluno.id);
     await this.validarTurmaExiste(data.idTurma);
     this.validarStatus(data.status);
-    
+
     // Validação se matricula já existe
     const matriculaExistente = await this.prisma.matricula.findFirst({
       where: {
-        idAluno: data.idAluno,
+        idAluno: aluno.id,
         idTurma: data.idTurma,
         status: data.status,
       },
@@ -55,7 +57,7 @@ export class MatriculasService {
 
     const matriculaCriada = await this.prisma.matricula.create({
       data: {
-        idAluno: data.idAluno,
+        idAluno: aluno.id,
         idTurma: data.idTurma,
         status: data.status,
       },
@@ -70,6 +72,21 @@ export class MatriculasService {
   async listarTodasAsMatriculas() {
     try {
       return await this.prisma.matricula.findMany();
+    } catch (error) {
+      throw new Error(`Erro ao buscar todas as matrículas: ${error.message}`);
+    }
+  }
+
+  async listarTodasAsMatriculasAluno(idUsuario?: number) {
+    try {
+      const aluno = await this.prisma.aluno.findFirst({
+        where: { idUsuario: idUsuario },
+      });
+      return await this.prisma.matricula.findMany({
+        where: {
+          idAluno: aluno.id
+        }
+      });
     } catch (error) {
       throw new Error(`Erro ao buscar todas as matrículas: ${error.message}`);
     }
