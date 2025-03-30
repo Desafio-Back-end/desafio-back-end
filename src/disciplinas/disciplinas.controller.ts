@@ -15,9 +15,14 @@ export class DisciplinasController {
     return this.disciplinasService.create(createDisciplinaDto);
   }
 
-  @TipoUsuarios(TipoUsuario.Instituicao)
   @TipoUsuarios(TipoUsuario.Professor)
-  @Get()
+  @Get('professor')
+  listarTodasDisciplinas() {
+    return this.disciplinasService.findAll();
+  }
+
+  @TipoUsuarios(TipoUsuario.Instituicao)
+  @Get('instituicao')
   findAll() {
     return this.disciplinasService.findAll();
   }
