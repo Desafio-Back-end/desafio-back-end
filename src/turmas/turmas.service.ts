@@ -137,4 +137,17 @@ export class TurmasService {
       throw new Error(`Erro ao remover a turma: ${error.message}`);
     }
   }
+
+  async listarTurmasVinculadasProfessor(idProfessor: number) {
+    try {
+      return await this.prisma.turma.findMany({
+        where: {
+          idProfessor: idProfessor
+        }
+      });
+      
+    } catch (error) {
+      throw new Error(`Erro ao buscar turmas vinculadas ao professor: ${error.message}`);
+    }
+  }
 }

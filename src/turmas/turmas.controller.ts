@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { TurmasService } from './turmas.service';
 import { CreateTurmaDto } from './dto/create-turma.dto';
 import { UpdateTurmaDto } from './dto/update-turma.dto';
@@ -20,6 +20,12 @@ export class TurmasController {
   listarTodasAsTurmas() {
     return this.turmasService.listarTodasAsTurmas();
   }
+
+  @Get('listarTurmasProfessor')
+  listarTurmasVinculadasProfessor(@Request() req) {
+    return this.turmasService.listarTurmasVinculadasProfessor(req.user.sub);
+  }
+  
   @TipoUsuarios(TipoUsuario.Instituicao)
   @Get(':id')
   buscarTurma(@Param('id') id: string) {
