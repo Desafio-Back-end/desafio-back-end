@@ -50,7 +50,7 @@ model Turma {
    id    Int     @default(autoincrement()) @id
    idProfessor Int
    idDisciplina Int
-   disciplina Disciplina @relation(fields: [idDisciplina], references: [id])
+   disciplina Disciplina @relation(fields: [idDisciplina], references: [id], onDelete: Cascade)
    professor Professor @relation(fields: [idProfessor], references: [id])
    horarioTurno String?
    anoSemestre String?
