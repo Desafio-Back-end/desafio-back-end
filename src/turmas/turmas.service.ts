@@ -138,14 +138,17 @@ export class TurmasService {
     }
   }
 
-  async listarTurmasVinculadasProfessor(idProfessor: number) {
+  async listarTurmasVinculadasProfessor(idUsuario: number) {
     try {
+      const professor = await this.prisma.professor.findFirst({
+        where: { idUsuario: idUsuario },
+      });
       return await this.prisma.turma.findMany({
         where: {
-          idProfessor: idProfessor
+          idProfessor: professor.id
         }
       });
-      
+
     } catch (error) {
       throw new Error(`Erro ao buscar turmas vinculadas ao professor: ${error.message}`);
     }
